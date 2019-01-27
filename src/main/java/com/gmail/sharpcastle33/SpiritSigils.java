@@ -1,5 +1,6 @@
 package com.gmail.sharpcastle33;
 
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,27 +11,41 @@ import com.gmail.sharpcastle33.listeners.SigilEventListener;
 import com.gmail.sharpcastle33.listeners.SigilGUIListener;
 
 public class SpiritSigils extends JavaPlugin {
-	
-	/*
-	 * Spirit Sigils main class.
-	 */
-	
-	public static Plugin plugin;
-	
-	public void onEnable() {
-		plugin = this;
-		getServer().getPluginManager().registerEvents(new SigilCreationListener(), plugin);			// Detects and handles sigil creation
-		getServer().getPluginManager().registerEvents(new SigilDestructionListener(), plugin);			// Detects and handles sigil destruction
-		getServer().getPluginManager().registerEvents(new SigilAttunementListener(), plugin);			//Detects and handles sigil attunement
-		getServer().getPluginManager().registerEvents(new SigilEventListener(), plugin);			// Detects and handles sigil-related events (eg mining sigil pickup)
-		getServer().getPluginManager().registerEvents(new SigilGUIListener(), plugin);			// Detects and handles sigil GUI (if applicable)
 
-		
-	}
-	
-	public void onDisable() {
-		
-	}
-	
+    // Don't do this. Public static mutable fields aren't great. Use a static getter.
+//	public static Plugin plugin;
 
+    private static SpiritSigils instance = null;
+
+    public void onEnable() {
+        instance = this;
+        Listener[] listeners = new Listener[]{
+                new SigilCreationListener(),
+                new SigilDestructionListener(),
+                new SigilAttunementListener(),
+                new SigilEventListener(),
+                new SigilGUIListener()
+        };
+
+        for (Listener l : listeners) {
+            getServer().getPluginManager().registerEvents(l, getInstance());
+        }
+    }
+
+    /**
+     * @return SpiritSigils instance
+     * @throws IllegalStateException If the plugin hasn't been initialized yet, this exception is thrown to indicate an error.
+     */
+    public static SpiritSigils getInstance() throws IllegalStateException {
+        if (instance == null) {
+            throw new IllegalStateException(SpiritSigils.class.getSimpleName() + " plugin hasn't been setup properly at this time.");
+        }
+
+        return instance;
+    }
+
+    public void onDisable() {
+        // Make sure other plugins don't invoke anything on this one to avoid strange side effects, after this one has been disabled.
+        instance = null;
+    }
 }
