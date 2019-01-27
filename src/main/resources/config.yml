@@ -3,12 +3,12 @@ limits:
 
 messages:
   en:
-    MINING_SIGIL_ITEM_NAME: "$YELLOW$Mining Sigil";
-    MINING_SIGIL_CHEST_NAME: "$BLUE$Mining Sigil Core";
-    MINING_SIGIL_CREATION_SUCCESS: "$GREEN$Mining Sigil successfully created.";
-    REQUIRES_SKY: "$RED$This sigil requires an unobstructed view of the sky.";
-    INVALID_LOCATION: "$RED$Invalid placement location.";
-    ERROR_STORAGE_FULL: "$RED$Sigil storage is full.";
-    STORAGE_LINKED: "$BLUE$Storage chest linked.";
-    ATTUNMENT_BROKEN: "$RED$You are no longer attuned with this Mining Sigil.";
-    ATTUNEMENT_SUCCESS: "$GREEN$You are now attuned to this Mining Sigil.";
+    MINING_SIGIL_ITEM_NAME: "$YELLOW$Mining Sigil"
+    MINING_SIGIL_CHEST_NAME: "$BLUE$Mining Sigil Core"
+    MINING_SIGIL_CREATION_SUCCESS: "$GREEN$Mining Sigil successfully created."
+    REQUIRES_SKY: "$RED$This sigil requires an unobstructed view of the sky."
+    INVALID_LOCATION: "$RED$Invalid placement location."
+    ERROR_STORAGE_FULL: "$RED$Sigil storage is full."
+    STORAGE_LINKED: "$BLUE$Storage chest linked."
+    ATTUNMENT_BROKEN: "$RED$You are no longer attuned with this Mining Sigil."
+    ATTUNEMENT_SUCCESS: "$GREEN$You are now attuned to this Mining Sigil."
