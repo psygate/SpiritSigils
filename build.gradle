@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'idea'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+
+    maven {
+        url = 'http://repo.maven.apache.org/maven2'
+    }
+}
+
+dependencies {
+    compile 'org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT'
+}
+
+group = 'com.gmail.sharpcastle33'
+version = '0.0.1-SNAPSHOT'
+description = 'Spirit Sigils'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
