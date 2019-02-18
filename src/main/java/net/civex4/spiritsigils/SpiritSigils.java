@@ -72,7 +72,7 @@ public class SpiritSigils extends JavaPlugin {
             }
         }, this);
 
-        if (Files.exists(Paths.get(".debug_plugins"))) {
+        if (DEBUG()) {
             Bukkit.broadcast(new TextComponent(ChatColor.RED + "Sigil DEBUG MODE ENABLED."));
             for (Player p : getServer().getOnlinePlayers()) {
                 p.getInventory().clear();
