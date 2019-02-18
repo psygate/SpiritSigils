@@ -4,6 +4,11 @@ target/
 *.class
 *.iml
 .idea/
+/out/
+/build/
+/gradle/
+/.idea/
+/.gradle/
 
 # Compiled class file
 *.class

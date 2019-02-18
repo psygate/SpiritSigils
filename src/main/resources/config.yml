@@ -1,14 +1,66 @@
-limits:
-  miningSigilAttunementLimit: 4
-
-messages:
-  en:
-    MINING_SIGIL_ITEM_NAME: "$YELLOW$Mining Sigil"
-    MINING_SIGIL_CHEST_NAME: "$BLUE$Mining Sigil Core"
-    MINING_SIGIL_CREATION_SUCCESS: "$GREEN$Mining Sigil successfully created."
-    REQUIRES_SKY: "$RED$This sigil requires an unobstructed view of the sky."
-    INVALID_LOCATION: "$RED$Invalid placement location."
-    ERROR_STORAGE_FULL: "$RED$Sigil storage is full."
-    STORAGE_LINKED: "$BLUE$Storage chest linked."
-    ATTUNMENT_BROKEN: "$RED$You are no longer attuned with this Mining Sigil."
-    ATTUNEMENT_SUCCESS: "$GREEN$You are now attuned to this Mining Sigil."
+!!net.civex4.spiritsigils.configuration.Configuration
+VERSION: 1
+generalSettings:
+  sigilTickDelay: 20
+runeSettings:
+  - !!net.civex4.spiritsigils.configuration.runes.PotionEffectRuneSetting
+    duration: 21
+    item:
+      amount: 64
+      displayName: §6Rune of Swiftness
+      enchantments:
+        DURABILITY: 1
+      itemFlags:
+        - HIDE_ENCHANTS
+      lore:
+        - §fPlace this in target sigil to enhance your movement speed..
+      material: DIAMOND
+    maximumRunesPerSigil: 4
+    potionEffectType: SPEED
+    runeName: Rune of Swiftness
+    strength: 1
+  - !!net.civex4.spiritsigils.configuration.runes.PotionEffectRuneSetting
+    duration: 21
+    item:
+      amount: 64
+      displayName: §6Rune of Regeneration
+      enchantments:
+        DURABILITY: 1
+      itemFlags:
+        - HIDE_ENCHANTS
+      lore:
+        - §fPlace this in target sigil to grant regenration.
+      material: DIAMOND
+    maximumRunesPerSigil: 4
+    potionEffectType: REGENERATION
+    runeName: Rune of Regeneration
+    strength: 1
+sigilSettings:
+  - blockType: BLACK_SHULKER_BOX
+    fuelItem:
+      amount: 1
+      displayName: §4Sigil Fuel
+      enchantments:
+        DURABILITY: 1
+      itemFlags:
+        - HIDE_ENCHANTS
+      lore:
+        - §fPlace this in target mining sigil to fuel it.
+      material: GOLD_INGOT
+    maxAttunedPlayers: 4
+    maxRunes: 8
+    placementItem:
+      amount: 64
+      displayName: §6Mining Sigil
+      enchantments:
+        DURABILITY: 1
+      itemFlags:
+        - HIDE_ENCHANTS
+      lore:
+        - §fPlace this to create target Mining Sigil.
+      material: DIAMOND_BLOCK
+    runeLimits:
+      Rune of Swiftness: 2
+      Rune of Regeneration: 2
+    sigilName: §6Mining Sigil
+    ticksPerFuelUnit: 5
