@@ -1,7 +1,6 @@
 package net.civex4.spiritsigils;
 
 import net.civex4.spiritsigils.configuration.Configuration;
-import net.civex4.spiritsigils.configuration.ItemStackProxy;
 import net.civex4.spiritsigils.sigils.SigilManager;
 import net.civex4.spiritsigils.util.BlockKey;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,13 +10,17 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,18 +30,30 @@ public class SpiritSigils extends JavaPlugin {
 
     // Don't do this. Public static mutable fields aren't great. Use target static getter.
 //	public static Plugin plugin;
-    private static final boolean DEBUG;
     private static SpiritSigils instance = null;
-
-    static {
-        DEBUG = Files.exists(Paths.get(".debug_plugins"));
-    }
-
     private Configuration configuration;
     private SigilManager sigilManager;
 
     public static boolean DEBUG() {
-        return DEBUG;
+        return Files.exists(Paths.get(".debug_plugins"));
+    }
+
+    public static void debugInventory(Configuration configuration) {
+        for (Player p : getInstance().getServer().getOnlinePlayers()) {
+            p.getInventory().clear();
+            configuration.getSigilSettings().forEach(s -> {
+                p.getInventory().addItem(s.getPlacementItem().toItemStack());
+            });
+            p.getInventory().addItem(new ItemStack(Material.STICK, 1));
+            configuration.getRuneSettings().forEach(e -> {
+                p.getInventory().addItem(e.getItem().toItemStack());
+            });
+            configuration.getSigilSettings().forEach(s -> {
+                ItemStack e = s.getFuelItem().toItemStack();
+                e.setAmount(64);
+                p.getInventory().addItem(e);
+            });
+        }
     }
 
     @Override
@@ -46,9 +61,12 @@ public class SpiritSigils extends JavaPlugin {
         try {
             Thread.currentThread().setContextClassLoader(getClassLoader());
             onEnableThrowing();
+            getLogger().warning("SpiritSigils enabled.");
         } catch (RuntimeException e) {
+            getLogger().warning("Exception thrown.");
             throw e;
         } catch (Exception e) {
+            getLogger().warning("Exception thrown. Rewrapping exception.");
             throw new RuntimeException(e);
         }
     }
@@ -74,21 +92,15 @@ public class SpiritSigils extends JavaPlugin {
 
         if (DEBUG()) {
             Bukkit.broadcast(new TextComponent(ChatColor.RED + "Sigil DEBUG MODE ENABLED."));
-            for (Player p : getServer().getOnlinePlayers()) {
-                p.getInventory().clear();
-                configuration.getSigilSettings().forEach(s -> {
-                    p.getInventory().addItem(s.getPlacementItem().toItemStack());
-                });
-                p.getInventory().addItem(new ItemStack(Material.STICK, 1));
-                configuration.getRuneSettings().forEach(e -> {
-                    p.getInventory().addItem(e.getItem().toItemStack());
-                });
-                configuration.getSigilSettings().forEach(s -> {
-                    ItemStack e = s.getFuelItem().toItemStack();
-                    e.setAmount(64);
-                    p.getInventory().addItem(e);
-                });
-            }
+            debugInventory(configuration);
+            getServer().getPluginManager().registerEvents(new Listener() {
+                @EventHandler
+                public void onPlayerChat(AsyncPlayerChatEvent ev) {
+                    if ("sigilgib".equals(ev.getMessage())) {
+                        getServer().getScheduler().runTask(SpiritSigils.this, () -> debugInventory(configuration));
+                    }
+                }
+            }, this);
         }
     }
 
@@ -114,6 +126,7 @@ public class SpiritSigils extends JavaPlugin {
     }
 
     private Configuration loadConfiguration() throws IOException {
+        saveDefaultConfig();
         Path configPath = Paths.get(getDataFolder().getPath(), "config.yml");
         if (DEBUG()) {
             getLogger().info(".debug_plugins file detected, deleting configuration.");
@@ -125,8 +138,6 @@ public class SpiritSigils extends JavaPlugin {
                 Yaml yaml = new Yaml(opt);
                 yaml.dump(Configuration.getDefaultConfig(), out);
             }
-        } else {
-            saveDefaultConfig();
         }
 
         Yaml yaml = new Yaml();

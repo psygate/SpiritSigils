@@ -1,10 +1,10 @@
 package net.civex4.spiritsigils.sigils.inventory;
 
-import net.civex4.spiritsigils.runes.RuneEffect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -12,17 +12,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class AttunementInventory extends ASigilInventory {
-    private final static ItemStack emptySlotItem;
+    private final static ItemStack EMPTY_ATTUNEMENT_SLOT_ITEM;
 
     static {
-        emptySlotItem = new ItemStack(Material.ENDER_PEARL, 1);
-        ItemMeta meta = emptySlotItem.getItemMeta();
+        EMPTY_ATTUNEMENT_SLOT_ITEM = new ItemStack(Material.ENDER_PEARL, 1);
+        ItemMeta meta = EMPTY_ATTUNEMENT_SLOT_ITEM.getItemMeta();
         meta.setDisplayName("Empty Attunement Slot");
         meta.setLore(Arrays.asList(ChatColor.WHITE + "Click here to attune to this sigil."));
-        emptySlotItem.setItemMeta(meta);
+        EMPTY_ATTUNEMENT_SLOT_ITEM.setItemMeta(meta);
     }
 
     public AttunementInventory(SigilInventoryManager sigilInventoryManager) {
@@ -30,7 +29,7 @@ public class AttunementInventory extends ASigilInventory {
 
         int maxattunements = sigilInventoryManager.getSigil().getSigilSetting().getMaxAttunedPlayers();
         for (int i = 0; i < maxattunements; i++) {
-            getInventory().setItem(i, emptySlotItem.clone());
+            getInventory().setItem(i, EMPTY_ATTUNEMENT_SLOT_ITEM.clone());
         }
 
         addListener(ev -> {
@@ -60,8 +59,17 @@ public class AttunementInventory extends ASigilInventory {
                 ev.getWhoClicked().sendMessage(ChatColor.RED + "You're already attuned to a sigil.");
             }
         } else if (isAttunedToPlayer(item, ev.getWhoClicked())) {
-            getInventory().setItem(ev.getSlot(), emptySlotItem.clone());
+            getInventory().setItem(ev.getSlot(), EMPTY_ATTUNEMENT_SLOT_ITEM.clone());
             getSigilInventoryManager().getSigil().getSigilManager().unattunePlayer(ev.getWhoClicked().getUniqueId());
+        }
+    }
+
+    public void unattunePlayer(Player p) {
+        for (int i = 0; i < getInventory().getSize(); i++) {
+            ItemStack stack = getInventory().getItem(i);
+            if (!isEmpty(stack) && isAttunedToPlayer(stack, p)) {
+                getInventory().setItem(i, EMPTY_ATTUNEMENT_SLOT_ITEM);
+            }
         }
     }
 
@@ -74,4 +82,5 @@ public class AttunementInventory extends ASigilInventory {
                 && stack.getItemMeta().getDisplayName() != null
                 && !stack.getItemMeta().getDisplayName().isEmpty();
     }
+
 }

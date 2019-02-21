@@ -15,8 +15,9 @@ public class ResolvedSigilSetting {
     private ItemStack fuelItem;
     private int ticksPerFuelUnit;
     private List<RuneSetting> runeSettings;
+    private int maxRange;
 
-    public ResolvedSigilSetting(String sigilName, ItemStack placementItem, Material blockType, int maxAttunedPlayers, int maxRunes, ItemStack fuelItem, int ticksPerFuelUnit, List<RuneSetting> runeLimits) {
+    public ResolvedSigilSetting(String sigilName, ItemStack placementItem, Material blockType, int maxAttunedPlayers, int maxRunes, ItemStack fuelItem, int ticksPerFuelUnit, int maxRange, List<RuneSetting> runeLimits) {
         this.sigilName = sigilName;
         this.placementItem = placementItem;
         this.blockType = blockType;
@@ -25,6 +26,7 @@ public class ResolvedSigilSetting {
         this.fuelItem = fuelItem;
         this.ticksPerFuelUnit = ticksPerFuelUnit;
         this.runeSettings = runeLimits;
+        this.maxRange = maxRange;
     }
 
     public ResolvedSigilSetting(SigilSetting sigilSetting, List<RuneSetting> runeLimits) {
@@ -36,6 +38,7 @@ public class ResolvedSigilSetting {
                 sigilSetting.getMaxRunes(),
                 sigilSetting.getFuelItem().toItemStack(),
                 sigilSetting.getTicksPerFuelUnit(),
+                sigilSetting.getMaxRange(),
                 runeLimits
         );
     }
@@ -106,5 +109,13 @@ public class ResolvedSigilSetting {
 
     public void setRuneSettings(List<RuneSetting> runeSettings) {
         this.runeSettings = runeSettings;
+    }
+
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
     }
 }

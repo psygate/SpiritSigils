@@ -1,7 +1,8 @@
 package net.civex4.spiritsigils.configuration;
 
-import net.civex4.spiritsigils.configuration.runes.RuneSetting;
+import net.civex4.spiritsigils.configuration.runes.MineDropCollectionRune;
 import net.civex4.spiritsigils.configuration.runes.PotionEffectRuneSetting;
+import net.civex4.spiritsigils.configuration.runes.RuneSetting;
 import net.civex4.spiritsigils.configuration.sigils.ResolvedSigilSetting;
 import net.civex4.spiritsigils.configuration.sigils.SigilSetting;
 import org.bukkit.ChatColor;
@@ -126,7 +127,9 @@ public class Configuration {
                                 new HashMap<String, Integer>() {{
                                     put("Rune of Swiftness", 2);
                                     put("Rune of Regeneration", 2);
-                                }}
+                                    put("Rune of Collection", 1);
+                                }},
+                                100
                         )
                 ),
                 Arrays.asList(
@@ -147,7 +150,7 @@ public class Configuration {
                                 4,
                                 PotionEffectType.SPEED.getName(),
                                 1,
-                                21
+                                40
                         ),
                         new PotionEffectRuneSetting(
                                 "Rune of Regeneration",
@@ -166,7 +169,23 @@ public class Configuration {
                                 4,
                                 PotionEffectType.REGENERATION.getName(),
                                 1,
-                                21
+                                40
+                        ),
+                        new MineDropCollectionRune(
+                                "Rune of Collection",
+                                new ItemStackProxy(
+                                        Material.DIAMOND,
+                                        64,
+                                        ChatColor.GOLD + "Rune of Collection",
+                                        Arrays.asList(ChatColor.WHITE + "Place this in target sigil to make it collect drops."),
+                                        new HashMap<String, Integer>() {
+                                            {
+                                                put(Enchantment.DURABILITY.getName(), 1);
+                                            }
+                                        },
+                                        Arrays.asList(ItemFlag.HIDE_ENCHANTS.name())
+                                ),
+                                1
                         )
                 )
         );

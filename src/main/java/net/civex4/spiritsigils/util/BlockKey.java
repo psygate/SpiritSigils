@@ -79,4 +79,10 @@ public class BlockKey {
     public World getWorld() {
         return Bukkit.getWorld(worldUUID);
     }
+
+    public int distanceSqr(Location loc) {
+        return (x - loc.getBlockX()) * (x - loc.getBlockX())
+                + (y - loc.getBlockY()) * (y - loc.getBlockY())
+                + (z - loc.getBlockZ()) * (z - loc.getBlockZ());
+    }
 }

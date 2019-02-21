@@ -2,21 +2,13 @@ package net.civex4.spiritsigils.sigils.inventory;
 
 import net.civex4.spiritsigils.configuration.ItemStackProxy;
 import net.civex4.spiritsigils.sigils.Sigil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemFlag;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
 
 public class SigilInventoryManager {
     private final Sigil sigil;
@@ -24,6 +16,7 @@ public class SigilInventoryManager {
     private final FuelInventory fuelInventory;
     private final RuneInventory runeInventory;
     private final AttunementInventory attunementInventory;
+    private final ItemInventory itemInventory;
 
     public SigilInventoryManager(Sigil sigil) {
         this.sigil = sigil;
@@ -31,6 +24,7 @@ public class SigilInventoryManager {
         fuelInventory = new FuelInventory(this);
         runeInventory = new RuneInventory(this);
         attunementInventory = new AttunementInventory(this);
+        itemInventory = new ItemInventory(this);
 
         navigationInventory.addInventory(
                 new ItemStackProxy(
@@ -68,6 +62,19 @@ public class SigilInventoryManager {
                         Arrays.asList(ItemFlag.HIDE_ENCHANTS.name())
                 ).toItemStack(), attunementInventory
         );
+
+        navigationInventory.addInventory(
+                new ItemStackProxy(
+                        Material.CHEST,
+                        1,
+                        ChatColor.DARK_PURPLE + "Item Inventory",
+                        Arrays.asList(ChatColor.WHITE + "Click here to go to the item inventory of this sigil."),
+                        new HashMap<String, Integer>() {{
+                            put(Enchantment.DURABILITY.getName(), 1);
+                        }},
+                        Arrays.asList(ItemFlag.HIDE_ENCHANTS.name())
+                ).toItemStack(), itemInventory
+        );
     }
 
     public Sigil getSigil() {
@@ -84,5 +91,13 @@ public class SigilInventoryManager {
 
     public RuneInventory getRuneInventory() {
         return runeInventory;
+    }
+
+    public AttunementInventory getAttunementInventory() {
+        return attunementInventory;
+    }
+
+    public ItemInventory getItemInventory() {
+        return itemInventory;
     }
 }

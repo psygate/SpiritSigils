@@ -1,9 +1,6 @@
 package net.civex4.spiritsigils.configuration.runes;
 
 import net.civex4.spiritsigils.configuration.ItemStackProxy;
-import org.bukkit.entity.Player;
-
-import java.util.List;
 
 public abstract class RuneSetting {
     private String runeName;
@@ -42,6 +39,4 @@ public abstract class RuneSetting {
     public void setMaximumRunesPerSigil(int maximumRunesPerSigil) {
         this.maximumRunesPerSigil = maximumRunesPerSigil;
     }
-
-    public abstract void apply(int amountOfRunes, List<Player> players);
 }

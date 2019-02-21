@@ -3,7 +3,6 @@ package net.civex4.spiritsigils.configuration.sigils;
 import net.civex4.spiritsigils.configuration.ItemStackProxy;
 import org.bukkit.Material;
 
-import java.util.List;
 import java.util.Map;
 
 public class SigilSetting {
@@ -15,11 +14,12 @@ public class SigilSetting {
     private ItemStackProxy fuelItem;
     private int ticksPerFuelUnit;
     private Map<String, Integer> runeLimits;
+    private int maxRange;
 
     public SigilSetting() {
     }
 
-    public SigilSetting(String sigilName, ItemStackProxy placementItem, Material blockType, int maxAttunedPlayers, int maxRunes, ItemStackProxy fuelItem, int ticksPerFuelUnit, Map<String, Integer> runeLimits) {
+    public SigilSetting(String sigilName, ItemStackProxy placementItem, Material blockType, int maxAttunedPlayers, int maxRunes, ItemStackProxy fuelItem, int ticksPerFuelUnit, Map<String, Integer> runeLimits, int maxRange) {
         this.sigilName = sigilName;
         this.placementItem = placementItem;
         this.blockType = blockType;
@@ -28,6 +28,7 @@ public class SigilSetting {
         this.fuelItem = fuelItem;
         this.ticksPerFuelUnit = ticksPerFuelUnit;
         this.runeLimits = runeLimits;
+        this.maxRange = maxRange;
     }
 
     public ItemStackProxy getPlacementItem() {
@@ -92,6 +93,14 @@ public class SigilSetting {
 
     public void setRuneLimits(Map<String, Integer> runeLimits) {
         this.runeLimits = runeLimits;
+    }
+
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
     }
 }
 

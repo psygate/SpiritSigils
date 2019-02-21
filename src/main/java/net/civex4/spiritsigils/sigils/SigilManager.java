@@ -7,6 +7,7 @@ import net.civex4.spiritsigils.sigils.inventory.ASigilInventory;
 import net.civex4.spiritsigils.util.BlockKey;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -18,10 +19,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class SigilManager implements Listener {
     private Configuration configuration;
+    private SigilEventManager eventManager;
 
     public SigilManager(Configuration configuration) {
         this.configuration = configuration;
@@ -31,6 +36,8 @@ public class SigilManager implements Listener {
                 configuration.getGeneralSettings().getSigilTickDelay(),
                 configuration.getGeneralSettings().getSigilTickDelay()
         );
+
+        eventManager = new SigilEventManager();
     }
 
     @EventHandler
@@ -74,7 +81,7 @@ public class SigilManager implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent ev) {
-        removeAttunedPlayer(ev.getPlayer().getUniqueId());
+        unattunePlayerAndRemoveEffects(ev.getPlayer());
     }
 
     @EventHandler
@@ -99,6 +106,18 @@ public class SigilManager implements Listener {
                 ev.setCancelled(true);
                 ev.getWhoClicked().sendMessage(ChatColor.RED + "Dragging currently disabled.");
             }
+        }
+    }
+
+    /**
+     * This can only be done to online players.
+     *
+     * @param player
+     */
+    public void unattunePlayerAndRemoveEffects(Player player) {
+        if (playerAttunements.containsKey(player)) {
+            playerAttunements.get(player).unattunePlayerAndRemoveEffects(player);
+            playerAttunements.remove(player);
         }
     }
 
@@ -138,11 +157,7 @@ public class SigilManager implements Listener {
     }
 
     protected void removeSigil(Sigil sigil) {
-        if (sigil.getDropOnDestroy() != null) {
-            sigil.destroy();
-        }
-
-        sigil.getAttunedPlayers().forEach(this::unattunePlayer);
+        sigil.destroy();
         sigils.remove(sigil.getLocation());
     }
 
@@ -160,6 +175,14 @@ public class SigilManager implements Listener {
             sigil.removeAttunedPlayer(player);
             removeAttunedPlayer(player);
         }
+    }
+
+    public SigilEventManager getEventManager() {
+        return eventManager;
+    }
+
+    public void setEventManager(SigilEventManager eventManager) {
+        this.eventManager = eventManager;
     }
 
     private void addAttunedPlayer(UUID player, Sigil sigil) {
